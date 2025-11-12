@@ -5,6 +5,8 @@ import base64
 import re
 import time
 import urllib.request
+import io
+import zipfile
 
 
 ROOT_DIR = os.path.abspath(os.getcwd())
@@ -24,6 +26,62 @@ class Handler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         kwargs['directory'] = ROOT_DIR
         super().__init__(*args, **kwargs)
+
+    def do_GET(self):
+        # تنزيل مجلد الأصول كملف مضغوط
+        if self.path in ['/download/assets', '/download/assets.zip']:
+            try:
+                assets_dir = os.path.join(ROOT_DIR, 'assets')
+                if not os.path.isdir(assets_dir):
+                    raise FileNotFoundError('assets directory not found')
+                buf = io.BytesIO()
+                with zipfile.ZipFile(buf, 'w', zipfile.ZIP_DEFLATED) as zf:
+                    for root, _, files in os.walk(assets_dir):
+                        for name in files:
+                            abs_file = os.path.join(root, name)
+                            arcname = os.path.relpath(abs_file, assets_dir).replace('\\', '/')
+                            zf.write(abs_file, arcname)
+                data = buf.getvalue()
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/zip')
+                self.send_header('Content-Disposition', 'attachment; filename="assets.zip"')
+                self.send_header('Content-Length', str(len(data)))
+                self.end_headers()
+                self.wfile.write(data)
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({'ok': False, 'error': str(e)}).encode('utf-8'))
+            return
+
+        # تنزيل ملف بعينه من داخل الأصول عبر /download/assets/<path>
+        if self.path.startswith('/download/assets/'):
+            try:
+                rel = self.path[len('/download/assets/'):].lstrip('/')
+                assets_dir = os.path.join(ROOT_DIR, 'assets')
+                target = os.path.normpath(os.path.join(assets_dir, rel))
+                if not os.path.abspath(target).startswith(os.path.abspath(assets_dir)):
+                    raise ValueError('Invalid path')
+                if not os.path.isfile(target):
+                    raise FileNotFoundError('File not found')
+                mime = self.guess_type(target) or 'application/octet-stream'
+                with open(target, 'rb') as f:
+                    data = f.read()
+                self.send_response(200)
+                self.send_header('Content-Type', mime)
+                self.send_header('Content-Length', str(len(data)))
+                self.end_headers()
+                self.wfile.write(data)
+            except Exception as e:
+                self.send_response(404)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({'ok': False, 'error': str(e)}).encode('utf-8'))
+            return
+
+        # خلاف ذلك استخدم خدمة الملفات الثابتة الافتراضية
+        return super().do_GET()
 
     def do_POST(self):
         if self.path == '/api/save-menu':
