@@ -306,15 +306,19 @@
          }
 
          /* بطاقات الفئات: صورة مع تراكب وتعزيز قابلية القراءة */
-         .category-card {
-             position: relative;
-             border-radius: 0.75rem; /* rounded-xl */
-             overflow: hidden;
-             transition: transform .25s ease, box-shadow .25s ease, opacity .4s ease;
-             opacity: 0; /* ستظهر عبر المراقِب */
-             transform: translateY(6px);
-             display: block;
-         }
+        .category-card {
+            position: relative;
+            border-radius: 0.75rem; /* rounded-xl */
+            overflow: hidden;
+            transition: transform .25s ease, box-shadow .25s ease, opacity .4s ease;
+            opacity: 0; /* ستظهر عبر المراقِب */
+            transform: translateY(6px);
+            display: block;
+            min-height: 6.5rem; /* ضمان الارتفاع حتى بدون صورة */
+            background-color: #ffffff; /* خلفية افتراضية عند غياب الصورة */
+        }
+        @media (min-width: 640px) { .category-card { min-height: 7.5rem; } }
+        @media (min-width: 768px) { .category-card { min-height: 9rem; } }
          .category-card.reveal { opacity: 1; transform: translateY(0); }
          .category-card img { display: block; width: 100%; height: 6.5rem; object-fit: cover; }
          @media (min-width: 640px) { .category-card img { height: 7.5rem; } }
@@ -1507,39 +1511,45 @@
             // سنجمع صور الفئات من الأصول هنا لدمجها لاحقاً مع المخزّن محلياً
             let catImagesFromAssets = {};
 
-            // دمج الفئات من التخزين/الأصول، ودعم صيغة الكائنات {name, imageUrl}
+            // دمج فئات الأصول مع المخزّن المحلي، ودعم صيغة الكائنات {name, imageUrl}
             try {
-                let categoriesListRaw = [];
+                // قراءة الفئات من التخزين المحلي
+                let localCategoriesRaw = [];
                 const rawCatsList = localStorage.getItem('menu_categories');
                 if (rawCatsList) {
                     try {
                         const parsedCats = JSON.parse(rawCatsList);
-                        if (Array.isArray(parsedCats)) categoriesListRaw = parsedCats;
-                    } catch {}
-                }
-                if (!categoriesListRaw.length) {
-                    try {
-                        const respCats = await fetch('assets/categories.json', { cache: 'no-store' });
-                        if (respCats.ok) {
-                            const catsData = await respCats.json();
-                            if (Array.isArray(catsData)) categoriesListRaw = catsData;
-                        }
+                        if (Array.isArray(parsedCats)) localCategoriesRaw = parsedCats;
                     } catch {}
                 }
 
-                // استخرج الأسماء وجمّع صور الأصول إن توفرت
-                const categoryNames = [];
-                categoriesListRaw.forEach(cat => {
+                // قراءة الفئات من ملف الأصول دائماً للدمج
+                let assetsCatsRaw = [];
+                try {
+                    const respCats = await fetch('assets/categories.json', { cache: 'no-store' });
+                    if (respCats.ok) {
+                        const catsData = await respCats.json();
+                        if (Array.isArray(catsData)) assetsCatsRaw = catsData;
+                    }
+                } catch {}
+
+                // تجميع الأسماء ودمج الصور من الأصول عند توفرها
+                const categorySet = new Set();
+                const addCat = (cat) => {
                     if (typeof cat === 'string') {
-                        categoryNames.push(cat);
+                        const name = cat.trim();
+                        if (name) categorySet.add(name);
                     } else if (cat && typeof cat === 'object') {
                         const name = (cat.name || '').trim();
                         if (name) {
-                            categoryNames.push(name);
+                            categorySet.add(name);
                             if (cat.imageUrl) catImagesFromAssets[name] = cat.imageUrl;
                         }
                     }
-                });
+                };
+                localCategoriesRaw.forEach(addCat);
+                assetsCatsRaw.forEach(addCat);
+                const categoryNames = Array.from(categorySet);
 
                 if (categoryNames.length) {
                     const existingTitles = new Set(menuData.map(s => s.title));
@@ -1548,6 +1558,8 @@
                             menuData.push({ id: name.toLowerCase().replace(/\s+/g, '-'), title: name, items: [] });
                         }
                     });
+                    // تحديث المخزن المحلي ليعكس الدمج
+                    try { localStorage.setItem('menu_categories', JSON.stringify(categoryNames)); } catch {}
                 }
             } catch {}
 
