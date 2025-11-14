@@ -1,62 +1,7 @@
 [
   {
-    "name": "كرواسان",
-    "imageUrl": "assets/images/images.jpg"
-  },
-  {
-    "name": "دانش",
+    "name": "طريقة",
+    "size": "small",
     "imageUrl": "assets/images/download.jpg"
-  },
-  {
-    "name": "كيك / حلويات",
-    "imageUrl": ""
-  },
-  {
-    "name": "فطائر",
-    "imageUrl": ""
-  },
-  {
-    "name": "بيتزا",
-    "imageUrl": ""
-  },
-  {
-    "name": "باستا",
-    "imageUrl": ""
-  },
-  {
-    "name": "سلطة",
-    "imageUrl": ""
-  },
-  {
-    "name": "المشروبات الساخنة",
-    "imageUrl": ""
-  },
-  {
-    "name": "آيس كوفي / فرابي",
-    "imageUrl": ""
-  },
-  {
-    "name": "ميلك شيك",
-    "imageUrl": ""
-  },
-  {
-    "name": "كوكتيل",
-    "imageUrl": ""
-  },
-  {
-    "name": "موهيتو",
-    "imageUrl": ""
-  },
-  {
-    "name": "سموذي",
-    "imageUrl": ""
-  },
-  {
-    "name": "الأراكيل",
-    "imageUrl": ""
-  },
-  {
-    "name": "ؤلا",
-    "imageUrl": ""
   }
 ]

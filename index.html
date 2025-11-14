@@ -13,8 +13,8 @@
     <style>
         /* ثوابت ألوان وهوية العلامة */
         :root {
-            --brand-1: #06343b;
-            --brand-2: #0b5963;
+            --brand-1: #2978b0;
+            --brand-2: #1f5f8c;
             --brand-text: #eaf7f8;
             --brand-radial: rgba(255,255,255,0.10);
         }
@@ -115,9 +115,7 @@
             justify-content: center;
             color: #ffffff;
             direction: rtl;
-            background:
-                radial-gradient(1200px circle at 70% 20%, rgba(255,255,255,0.06), transparent 60%),
-                linear-gradient(135deg, #06343b, #0b5963);
+            background: #ffffff;
             transition: opacity 0.35s ease;
             will-change: opacity;
         }
@@ -222,7 +220,8 @@
         button[onclick^="updateQuantity"]:hover { filter: brightness(1.06); }
 
         /* كبسولات الأحجام/الشرائح ذات الخلفية الداكنة إلى تدرّج الهوية */
-        span[class*="bg-[#06343b]"] {
+        span[class*="bg-[#06343b]"],
+        span[class*="bg-[#2978b0]"] {
             background:
                 radial-gradient(180px circle at 50% 50%, var(--brand-radial), transparent 60%),
                 linear-gradient(135deg, var(--brand-1), var(--brand-2));
@@ -236,7 +235,7 @@
             gap: 0.5rem;
             overflow-x: auto;
             padding: 0.5rem;
-            background-color: #a2c4a8; /* الخلفية الجديدة وراء الفئات البيضاء */
+            background-color: rgba(144, 211, 235, 0.5);
             border: 1px solid #e5e7eb; /* gray-200 */
             border-radius: 0.75rem; /* rounded-xl */
             box-shadow: 0 8px 20px rgba(6, 52, 59, 0.08);
@@ -247,7 +246,7 @@
         .nav-link { white-space: nowrap; }
         /* إبراز العنصر النشط: حلقة داخلية وتكثيف التراكب بدلاً من تغيير الخلفية */
         .nav-link.active {
-            box-shadow: inset 0 0 0 2px #06343b, 0 8px 16px rgba(6, 52, 59, 0.14);
+            box-shadow: inset 0 0 0 2px #2978b0, 0 8px 16px rgba(41, 120, 176, 0.14);
             color: #ffffff !important;
         }
 
@@ -299,9 +298,9 @@
          #main-navbar.navbar-stuck {
              position: fixed; top: 0; left: 0; right: 0;
              background: rgba(255,255,255, .94);
-             color: #06343b !important;
+             color: #2978b0 !important;
              border-bottom: 1px solid #e5e7eb;
-             box-shadow: 0 8px 20px rgba(6, 52, 59, .08);
+             box-shadow: 0 8px 20px rgba(41, 120, 176, .08);
              z-index: 100;
          }
 
@@ -325,15 +324,15 @@
          @media (min-width: 768px) { .category-card img { height: 9rem; } }
          .category-card .cat-overlay {
              position: absolute; inset: 0;
-             background: linear-gradient(to top, rgba(6, 52, 59, .65), rgba(6, 52, 59, .40), rgba(6, 52, 59, 0));
+             background: linear-gradient(to top, rgba(41, 120, 176, .65), rgba(41, 120, 176, .40), rgba(41, 120, 176, 0));
              transition: background .25s ease, opacity .25s ease;
          }
          .nav-link.active .cat-overlay {
-             background: linear-gradient(to top, rgba(6, 52, 59, .72), rgba(6, 52, 59, .45), rgba(6, 52, 59, 0));
+             background: linear-gradient(to top, rgba(41, 120, 176, .72), rgba(41, 120, 176, .45), rgba(41, 120, 176, 0));
          }
-         .category-card:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(6, 52, 59, .12); }
+         .category-card:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(41, 120, 176, .12); }
          .category-card:hover .cat-overlay {
-             background: linear-gradient(to top, rgba(6, 52, 59, .52), rgba(6, 52, 59, .28), rgba(6, 52, 59, 0));
+             background: linear-gradient(to top, rgba(41, 120, 176, .52), rgba(41, 120, 176, .28), rgba(41, 120, 176, 0));
          }
          .category-card .cat-title {
              position: absolute; left: 0; right: 0; bottom: 0.5rem;
@@ -345,8 +344,11 @@
          @media (min-width: 768px) { .category-card .cat-title { font-size: 1.05rem; } }
 
          /* شريط البحث: يفتح تحت النافبار وبنفس ارتفاعه */
-         #search-bar-panel { transition: height .2s ease; }
-         #search-bar-panel.search-open { display: flex; align-items: center; }
+        #search-bar-panel { transition: height .2s ease; }
+        #search-bar-panel.search-open { display: flex; align-items: center; }
+
+        .brand-link { color: #2978b0; }
+        .brand-link:hover { color: #1f5f8c; }
 
  
       </style>
@@ -415,7 +417,7 @@
         <!-- شريط البحث المنسدل -->
         <div id="search-bar-panel" class="mb-6 hidden">
             <div class="relative">
-                <input type="text" id="search-input-mobile" oninput="filterItems()" placeholder="ابحث عن طبق..." class="w-full py-3 px-6 pr-12 rounded-xl bg-white text-main placeholder-gray-500 border border-gray-300 focus:ring-[#06343b] focus:border-[#06343b] transition">
+                <input type="text" id="search-input-mobile" oninput="filterItems()" placeholder="ابحث عن طبق..." class="w-full py-3 px-6 pr-12 rounded-xl bg-white text-main placeholder-gray-500 border border-gray-300 focus:ring-[#2978b0] focus:border-[#2978b0] transition">
                 <i data-lucide="search" class="w-5 h-5 text-gray-500 absolute top-1/2 left-4 transform -translate-y-1/2"></i>
             </div>
         </div>
@@ -851,11 +853,11 @@
                     }
                     // تغيير الخلفية مؤقتًا
                     const originalBg = sourceEl.style.backgroundColor;
-                    sourceEl.style.backgroundColor = '#06343b';
+                    sourceEl.style.backgroundColor = '#2978b0';
                     setTimeout(() => {
                         // إعادة الأيقونة إلى + وإرجاع الخلفية الأصلية
                         sourceEl.innerHTML = '<i data-lucide="plus" class="w-4 h-4 text-white"></i>';
-                        sourceEl.style.backgroundColor = originalBg || '#06343b';
+                        sourceEl.style.backgroundColor = originalBg || '#2978b0';
                         if (window.lucide && typeof lucide.createIcons === 'function') {
                             lucide.createIcons();
                         }
@@ -1041,7 +1043,7 @@
 
             // دعم عنصر "عنوان H2" داخل الفئة
             if ((item.type || 'item') === 'heading') {
-                const headingHtml = `<h2 class="text-2xl font-bold text-main mb-2 border-b-2 border-[#06343b]/50 pb-1">${item.name}</h2>`;
+                const headingHtml = `<h2 class="text-2xl font-bold text-main mb-2 border-b-2 border-[#2978b0]/50 pb-1">${item.name}</h2>`;
                 if (isList) {
                     return `<div class="heading-item">${headingHtml}</div>`;
                 } else {
@@ -1066,16 +1068,16 @@
             const priceText = hasVariants
                 ? ''
                 : (hasPrice ? `${basePrice.toLocaleString('ar-IQ')} د.ع` : '');
-            const priceHtml = priceText ? `<span class=\"text-sm font-black text-[#06343b]\">${priceText}</span>` : '';
+            const priceHtml = priceText ? `<span class=\"text-sm font-black text-[#2978b0]\">${priceText}</span>` : '';
 
             const variantsRow = hasVariants
-                ? `<div class=\"flex flex-col gap-2 mt-2\">\n                        ${item.variants.map(v => `\n                            <div class=\"flex items-center gap-1\">\n                                <span class=\"px-2 py-1 bg-[#06343b] text-white rounded-lg text-xs font-bold\">${v.label}${Number(v.price) > 0 ? ` — ${Number(v.price).toLocaleString('ar-IQ')} د.ع` : ''}</span>\n                                <button class=\"add-to-cart-btn add-circle-btn self-center\"\n                                        onclick=\"addItemToCart(${item.id}, '${String(v.key)}', this); event.stopPropagation();\" title=\"أضف\">\n                                    <i data-lucide=\"plus\" class=\"w-4 h-4\"></i>\n                                </button>\n                            </div>\n                        `).join('')}\n                   </div>`
+                ? `<div class=\"flex flex-col gap-2 mt-2\">\n                        ${item.variants.map(v => `\n                            <div class=\"flex items-center gap-1\">\n                                <span class=\"px-2 py-1 bg-[#2978b0] text-white rounded-lg text-xs font-bold\">${v.label}${Number(v.price) > 0 ? ` — ${Number(v.price).toLocaleString('ar-IQ')} د.ع` : ''}</span>\n                                <button class=\"add-to-cart-btn add-circle-btn self-center\"\n                                        onclick=\"addItemToCart(${item.id}, '${String(v.key)}', this); event.stopPropagation();\" title=\"أضف\">\n                                    <i data-lucide=\"plus\" class=\"w-4 h-4\"></i>\n                                </button>\n                            </div>\n                        `).join('')}\n                   </div>`
                 : '';
 
             if (isList) {
                 // نمط القائمة: السعر بجانب الاسم، الوصف تحتهم، مع أزرار الأحجام إن وجدت
                 return `
-                <div class="menu-item bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 hover:shadow-[#06343b]/30 ${cardClasses}" data-id="${item.id}" data-name="${item.name}" data-desc="${item.desc}">
+                <div class="menu-item bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 hover:shadow-[#2978b0]/30 ${cardClasses}" data-id="${item.id}" data-name="${item.name}" data-desc="${item.desc}">
                     <div class="relative flex-shrink-0">
                         <img src="${item.img || ''}" alt="${item.name}" class="${imageClasses}" onerror="this.style.display='none'" style="${item.img ? '' : 'display:none;'}" onclick="openImageLightbox('${item.img || ''}'); event.stopPropagation();">
                     </div>
@@ -1086,7 +1088,7 @@
                         </div>
                         <p class="text-xs text-gray-600 mb-2">${item.desc || ''}</p>
                         ${hasVariants ? variantsRow : `
-                            <button class="add-to-cart-btn self-start px-3 py-1 bg-[#06343b] hover:bg-[#06343b] text-white rounded-lg text-xs font-bold"
+                            <button class="add-to-cart-btn self-start px-3 py-1 bg-[#2978b0] hover:bg-[#2978b0] text-white rounded-lg text-xs font-bold"
                                     onclick="addItemToCart(${item.id}, null, this); event.stopPropagation();">
                                 أضف للسلة
                             </button>
@@ -1104,7 +1106,7 @@
                 </div>` : '';
 
             return `
-                <div class="menu-item bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 hover:shadow-[#06343b]/30 ${cardClasses}" data-id="${item.id}" data-name="${item.name}" data-desc="${item.desc}">
+                <div class="menu-item bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 hover:shadow-[#2978b0]/30 ${cardClasses}" data-id="${item.id}" data-name="${item.name}" data-desc="${item.desc}">
                     <div class="relative">
                         <img src="${item.img || ''}" alt="${item.name}" class="${imageClasses}" onerror="this.style.display='none'" style="${item.img ? '' : 'display:none;'}" onclick="openImageLightbox('${item.img || ''}'); event.stopPropagation();">
                         ${overlayHtml}
@@ -1366,9 +1368,9 @@
             const btnList = document.getElementById('btn-list-view');
             if (!btnGrid || !btnList) return;
             const setActive = (btn, active) => {
-                btn.classList.toggle('bg-[#06343b]', active);
+                btn.classList.toggle('bg-[#2978b0]', active);
                 btn.classList.toggle('text-white', active);
-                btn.classList.toggle('border-[#06343b]', active);
+                btn.classList.toggle('border-[#2978b0]', active);
                 btn.classList.toggle('bg-transparent', !active);
                 btn.classList.toggle('text-main', !active);
                 btn.classList.toggle('border-gray-300', !active);
@@ -1502,6 +1504,14 @@
         }
 
         window.onload = async () => {
+            try {
+                const p = new URLSearchParams(window.location.search);
+                if (p.get('reset') === '1') {
+                    localStorage.removeItem('menu_categories');
+                    localStorage.removeItem('menu_category_images');
+                    localStorage.removeItem(STORAGE_KEY_MENU);
+                }
+            } catch {}
             // تطبيق الهيرو من ملف الأصول إن وجد
             await applyHeroFromAssets();
             // تحميل البيانات من التخزين المحلي أو الأصول ثم بناء الأقسام
@@ -1958,7 +1968,7 @@ const rawWa = '905058297665';
   <!-- فوتر ثابت: تم صنعها بواسطة İQR MENU (رابط أخضر) -->
   <footer id="iqr-footer" class="fixed bottom-0 left-0 right-0 z-40 py-1 text-center text-xs text-gray-700 bg-white/95 backdrop-blur border-t border-gray-200">
     <span>تم صنعها بواسطة | </span>
-    <a href="https://iqrarabic.com/" class="font-bold text-green-600 hover:text-green-700" target="_blank" rel="noopener">İQR MENU</a>
+    <a href="https://iqrarabic.com/" class="font-bold brand-link" target="_blank" rel="noopener">İQR MENU</a>
   </footer>
 
 </body>

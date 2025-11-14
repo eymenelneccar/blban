@@ -304,6 +304,46 @@ class Handler(SimpleHTTPRequestHandler):
                 self.send_header('Content-Type', 'application/json; charset=utf-8')
                 self.end_headers()
                 self.wfile.write(json.dumps({'ok': False, 'error': str(e)}).encode('utf-8'))
+        elif self.path == '/api/export-to-google':
+            try:
+                assets_dir = os.path.join(ROOT_DIR, 'assets')
+                def read_json_file(p, default):
+                    try:
+                        with open(p, 'r', encoding='utf-8') as f:
+                            return json.load(f)
+                    except Exception:
+                        return default
+                menu = read_json_file(ASSETS_PATH, [])
+                categories = read_json_file(CATEGORIES_ASSETS_PATH, [])
+                govs = read_json_file(GOVS_ASSETS_PATH, [])
+                hero = read_json_file(HERO_ASSETS_PATH, {})
+                settings_path = os.path.join(assets_dir, 'settings.json')
+                settings_data = read_json_file(settings_path, {})
+                webhook = (settings_data.get('googleSheetsWebhookUrl') or '').strip()
+                if not webhook:
+                    raise ValueError('Missing googleSheetsWebhookUrl')
+                payload = {
+                    'ok': True,
+                    'assets': {
+                        'menu': menu,
+                        'categories': categories,
+                        'governorates': govs,
+                        'hero': hero,
+                        'settings': settings_data,
+                    }
+                }
+                req = urllib.request.Request(url=webhook, data=json.dumps(payload, ensure_ascii=False).encode('utf-8'), headers={'Content-Type': 'application/json'}, method='POST')
+                with urllib.request.urlopen(req, timeout=12) as resp:
+                    status = resp.getcode()
+                self.send_response(200 if status == 200 else status)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({'ok': True, 'status': status}).encode('utf-8'))
+            except Exception as e:
+                self.send_response(400)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({'ok': False, 'error': str(e)}).encode('utf-8'))
         else:
             self.send_response(404)
             self.send_header('Content-Type', 'application/json; charset=utf-8')
@@ -312,7 +352,7 @@ class Handler(SimpleHTTPRequestHandler):
 
 
 def main():
-    port = int(os.environ.get('PORT', '8000'))
+    port = int(os.environ.get('PORT', '5007'))
     httpd = ThreadingHTTPServer(('', port), Handler)
     print(f"Serving at http://localhost:{port}/ (root: {ROOT_DIR})")
     try:
