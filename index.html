@@ -1590,17 +1590,10 @@
             // 1. توليد روابط الأقسام بصور أكبر والاسم أسفلها
             renderNav(menuData);
             initViewToggle();
-            // تعيين الفئة الافتراضية “الفطور الصباحي” كنشطة إن وجدت
+            // اجعل أول رابط نشطًا دائمًا عند الفتح
             document.querySelectorAll('#section-nav-list .nav-link').forEach(l => l.classList.remove('active'));
-            const DEFAULT_SECTION_TITLE = 'الفطور الصباحي';
-            const defaultSection = menuData.find(s => s.title === DEFAULT_SECTION_TITLE);
-            if (defaultSection) {
-                const defLink = document.querySelector(`.nav-link[data-section-id="${defaultSection.id}"]`);
-                if (defLink) defLink.classList.add('active');
-            } else {
-                const firstNavLink = document.querySelector('#section-nav-list .nav-link');
-                if (firstNavLink) firstNavLink.classList.add('active');
-            }
+            const firstNavLink = document.querySelector('#section-nav-list .nav-link');
+            if (firstNavLink) firstNavLink.classList.add('active');
 
             // 2. تحميل السلة وتحديث العرض
             loadCart();
@@ -1684,11 +1677,12 @@
             // 3. التأكد من عمل الأيقونات في الأماكن الثابتة
             lucide.createIcons();
             
-            // 4. عرض قسم افتراضي مباشرة بدون تمرير إن وجد
-            if (defaultSection) {
-                renderMenuForSection(defaultSection.id);
+            // 4. عرض القسم النشط (الأول) فقط عند الفتح
+            const activeLink = document.querySelector('#section-nav-list .nav-link.active');
+            const activeId = activeLink ? activeLink.getAttribute('data-section-id') : null;
+            if (activeId) {
+                renderMenuForSection(activeId);
             } else {
-                // عرض جميع الأقسام مباشرة عند فتح المنيو
                 renderMenu(menuData);
             }
 

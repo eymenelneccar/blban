@@ -1,7 +1,50 @@
 [
   {
-    "name": "طريقة",
-    "size": "small",
-    "imageUrl": "assets/images/download.jpg"
+    "name": "دنيا القشطوطه",
+    "imageUrl": ""
+  },
+  {
+    "name": "دنيا الرز",
+    "imageUrl": ""
+  },
+  {
+    "name": "دنيا البمبوظه",
+    "imageUrl": ""
+  },
+  {
+    "name": "دنيا ام علي",
+    "imageUrl": ""
+  },
+  {
+    "name": "دنيا الهبه",
+    "imageUrl": ""
+  },
+  {
+    "name": "دنيا الكشري",
+    "imageUrl": ""
+  },
+  {
+    "name": "دنيا السلانكتيه",
+    "imageUrl": ""
+  },
+  {
+    "name": "دنيا اللؤه",
+    "imageUrl": ""
+  },
+  {
+    "name": "الإضافات",
+    "imageUrl": ""
+  },
+  {
+    "name": "العصائر",
+    "imageUrl": ""
+  },
+  {
+    "name": "المشروبات الغازية",
+    "imageUrl": ""
+  },
+  {
+    "name": "المياه",
+    "imageUrl": ""
   }
 ]

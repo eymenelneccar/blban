@@ -352,7 +352,7 @@ class Handler(SimpleHTTPRequestHandler):
 
 
 def main():
-    port = int(os.environ.get('PORT', '5007'))
+    port = int(os.environ.get('PORT', '5006'))
     httpd = ThreadingHTTPServer(('', port), Handler)
     print(f"Serving at http://localhost:{port}/ (root: {ROOT_DIR})")
     try:
